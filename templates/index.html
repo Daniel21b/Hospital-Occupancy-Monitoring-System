@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .nav a { margin-right: 10px; text-decoration: none; color: #333; }
+        .bed-overview { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .bed-overview div { border: 1px solid #ddd; padding: 10px; width: 30%; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        #map { height: 300px; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Healthcare Dashboard</h1>
+        <nav class="nav">
+            <a href="#">Overview</a>
+            <a href="#">Patients</a>
+            <a href="#">Schedules</a>
+            <a href="#">Staff</a>
+            <a href="#">Inventory</a>
+            <a href="#">Settings</a>
+            <a href="#">Log in</a>
+        </nav>
+    </div>
+
+    <h2>Bed Overview</h2>
+    <div class="bed-overview">
+        <div>
+            <h3>Total Beds</h3>
+            <p>{{ bed_overview.total_beds }}</p>
+        </div>
+        <div>
+            <h3>Beds Available</h3>
+            <p>{{ bed_overview.beds_available }}</p>
+        </div>
+        <div>
+            <h3>Critical Alerts</h3>
+            <p>{{ bed_overview.critical_alerts_count }}</p>
+        </div>
+    </div>
+
+    <h2>Critical Alerts</h2>
+    <table>
+        <tr>
+            <th>Patient</th>
+            <th>Bed</th>
+            <th>Status</th>
+            <th>Time</th>
+        </tr>
+        {% for alert in critical_alerts %}
+        <tr>
+            <td>{{ alert.patient }}</td>
+            <td>{{ alert.bed }}</td>
+            <td>{{ alert.status }}</td>
+            <td>{{ alert.time.strftime('%I:%M %p') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Hospital Map</h2>
+    <div id="map"></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            var hospital = {lat: 39.3642, lng: -74.4229}; // Coordinates for Atlantic City
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: hospital
+            });
+            var marker = new google.maps.Marker({
+                position: hospital,
+                map: map
+            });
+        }
+    </script>
+</body>
+</html>
